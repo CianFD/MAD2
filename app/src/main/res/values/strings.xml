@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Present Delivery Tracker App</string>
+    <string name="mainTitle">Welcome Buddy</string>
+    <string name="mainSubtitle">Track Your Elves Progress</string>
+    <string name="addButton">Add Presents</string>
+    <string name="gift">Gift</string>
+    <string name="coal">Coal</string>
+    <string name="amount">Number of Presents : </string>
+    <string name="total">Total so Far</string>
+    <string name="totalSoFar">$ Total</string>
+    <string name="reportTitle">Present Report</string>
+    <string name="defaultAmount">00</string>
+    <string name="defaultMethod">N/A</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="action_main">Add Delivery</string>
+    <string name="action_report">Report</string>
+
+    <string name="action_share">Share</string>
+    <string name="action_send">Send</string>
+    <string name="group_communicate">Communicate</string>
+
+    <string name="nav_header_title">Present Delivery Tracker</string>
+    <string name="nav_header_subtitle">themaninred@northpole.com</string>
+    <string name="nav_header_desc">Navigation Header Image</string>
+
+    <string name="action_about">About Us</string>
+    <string name="aboutus_title">Santa\'s Sick on Xmas Eve!</string>
+    <string name="aboutus_message">Hi, I\'m Buddy the Elf. \n\nSanta Claus has Food Poisoning from some bad Snowberries.\n\n We gotta delivery the presents for him!!\n\nTrack the presents as you put them under the Tree!!</string>
+
+    <string name="presentsNotFound">No Presents Yet…\nHop in the Sleigh!</string>
+    <string name="addError">Error : Couldn\'t Add to Present Count…</string>
+    <string name="Details">Details</string>
+
+    <string name="amt">Amount :</string>
+    <string name="type">Type :</string>
+    <string name="message_on_card">Message :</string>
+    <string name="pats">Pats on the Back :</string>
+</resources>
