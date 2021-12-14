@@ -1,6 +1,11 @@
 package ie.wit.presentdeliverytracker.models
 
+import androidx.lifecycle.MutableLiveData
+import ie.wit.presentdeliverytracker.api.DeliveryClient
 import timber.log.Timber
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 var lastId = 0L
 
@@ -12,8 +17,22 @@ object DeliveryManager : DeliveryStore {
 
     private val deliveries = ArrayList<DeliveryModel>()
 
-    override fun findAll(): List<DeliveryModel> {
-        return deliveries
+    override fun findAll(deliveriesList: MutableLiveData<List<DeliveryModel>>) {
+
+        val call = DeliveryClient.getApi().getall()
+
+        call.enqueue(object : Callback<List<DeliveryModel>> {
+            override fun onResponse(call: Call<List<DeliveryModel>>,
+                                    response: Response<List<DeliveryModel>>
+            ) {
+                deliveriesList.value = response.body() as ArrayList<DeliveryModel>
+                Timber.i("Retrofit JSON = ${response.body()}")
+            }
+
+            override fun onFailure(call: Call<List<DeliveryModel>>, t: Throwable) {
+                Timber.i("Retrofit Error : $t.message")
+            }
+        })
     }
 
     override fun findById(id:Long) : DeliveryModel? {

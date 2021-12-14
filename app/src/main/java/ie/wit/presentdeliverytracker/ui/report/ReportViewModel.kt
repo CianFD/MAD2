@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ie.wit.presentdeliverytracker.models.DeliveryManager
 import ie.wit.presentdeliverytracker.models.DeliveryModel
+import timber.log.Timber
 
 class ReportViewModel : ViewModel() {
 
@@ -18,6 +19,11 @@ class ReportViewModel : ViewModel() {
     }
 
     fun load() {
-        deliveriesList.value = DeliveryManager.findAll()
+        try {
+            DeliveryManager.findAll(deliveriesList)
+            Timber.i("Retrofit Success : $deliveriesList.value")
+        } catch (e: Exception) {
+            Timber.i("Retrofit Error : $e.message")
+        }
     }
 }

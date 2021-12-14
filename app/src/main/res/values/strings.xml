@@ -35,4 +35,6 @@
     <string name="type">Type :</string>
     <string name="message_on_card">Message :</string>
     <string name="pats">Pats on the Back :</string>
+
+    <string name="messageLoading">Please Wait while the Deliveries are Loading...</string>
 </resources>

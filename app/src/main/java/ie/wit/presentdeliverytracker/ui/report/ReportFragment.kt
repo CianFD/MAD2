@@ -1,5 +1,6 @@
 package ie.wit.presentdeliverytracker.ui.report
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -16,6 +17,9 @@ import ie.wit.presentdeliverytracker.adapters.DeliveryClickListener
 import ie.wit.presentdeliverytracker.databinding.FragmentReportBinding
 import ie.wit.presentdeliverytracker.main.PresentDeliveryTrackerApp
 import ie.wit.presentdeliverytracker.models.DeliveryModel
+import ie.wit.presentdeliverytracker.utils.createLoader
+import ie.wit.presentdeliverytracker.utils.hideLoader
+import ie.wit.presentdeliverytracker.utils.showLoader
 
 class ReportFragment : Fragment(), DeliveryClickListener {
 
@@ -23,6 +27,7 @@ class ReportFragment : Fragment(), DeliveryClickListener {
     private var _fragBinding: FragmentReportBinding? = null
     private val fragBinding get() = _fragBinding!!
     private lateinit var reportViewModel: ReportViewModel
+    lateinit var loader : AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +40,17 @@ class ReportFragment : Fragment(), DeliveryClickListener {
     ): View? {
         _fragBinding = FragmentReportBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+        loader = createLoader(requireActivity())
 
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
         reportViewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
+        showLoader(loader,"Downloading Deliveries")
         reportViewModel.observableDeliveriesList.observe(viewLifecycleOwner, Observer {
                 deliveries ->
-            deliveries?.let { render(deliveries) }
+            deliveries?.let {
+                render(deliveries)
+                hideLoader(loader)
+            }
         })
 
         val fab: FloatingActionButton = fragBinding.fab
