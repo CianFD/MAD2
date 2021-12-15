@@ -87,6 +87,19 @@ class ReportFragment : Fragment(), DeliveryClickListener {
         findNavController().navigate(action)
     }
 
+    fun setSwipeRefresh() {
+        fragBinding.swiperefresh.setOnRefreshListener {
+            fragBinding.swiperefresh.isRefreshing = true
+            showLoader(loader,"Downloading Deliveries")
+            reportViewModel.load()
+        }
+    }
+
+    fun checkSwipeRefresh() {
+        if (fragBinding.swiperefresh.isRefreshing)
+            fragBinding.swiperefresh.isRefreshing = false
+    }
+
     override fun onResume() {
         super.onResume()
         reportViewModel.load()

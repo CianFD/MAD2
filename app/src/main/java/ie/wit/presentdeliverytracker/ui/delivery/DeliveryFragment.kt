@@ -112,9 +112,9 @@ class DeliveryFragment : Fragment() {
         super.onResume()
         val reportViewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
         reportViewModel.observableDeliveriesList.observe(viewLifecycleOwner, Observer {
-                totalDelivered = reportViewModel.observableDeliveriesList.value!!.sumOf { it.amount }
+            totalDelivered = reportViewModel.observableDeliveriesList.value!!.sumBy { it.amount }
+            fragBinding.progressBar.progress = totalDelivered
+            fragBinding.totalSoFar.text = "$$totalDelivered"
         })
-        fragBinding.progressBar.progress = totalDelivered
-        fragBinding.totalSoFar.text = "$$totalDelivered"
     }
 }

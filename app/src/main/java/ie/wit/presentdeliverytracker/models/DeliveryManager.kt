@@ -2,6 +2,7 @@ package ie.wit.presentdeliverytracker.models
 
 import androidx.lifecycle.MutableLiveData
 import ie.wit.presentdeliverytracker.api.DeliveryClient
+import ie.wit.presentdeliverytracker.api.DeliveryWrapper
 import timber.log.Timber
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,9 +42,24 @@ object DeliveryManager : DeliveryStore {
     }
 
     override fun create(delivery: DeliveryModel) {
-        delivery.id = getId()
-        deliveries.add(delivery)
-        logAll()
+
+        val call = DeliveryClient.getApi().post(delivery)
+
+        call.enqueue(object : Callback<DeliveryWrapper> {
+            override fun onResponse(call: Call<DeliveryWrapper>,
+                                    response: Response<DeliveryWrapper>
+            ) {
+                val deliveryWrapper = response.body()
+                if (deliveryWrapper != null) {
+                    Timber.i("Retrofit ${deliveryWrapper.message}")
+                    Timber.i("Retrofit ${deliveryWrapper.data.toString()}")
+                }
+            }
+
+            override fun onFailure(call: Call<DeliveryWrapper>, t: Throwable) {
+                Timber.i("Retrofit Error : $t.message")
+            }
+        })
     }
 
     fun logAll() {

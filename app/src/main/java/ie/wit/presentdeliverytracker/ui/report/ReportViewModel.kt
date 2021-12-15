@@ -22,7 +22,8 @@ class ReportViewModel : ViewModel() {
         try {
             DeliveryManager.findAll(deliveriesList)
             Timber.i("Retrofit Success : $deliveriesList.value")
-        } catch (e: Exception) {
+        }
+        catch (e: Exception) {
             Timber.i("Retrofit Error : $e.message")
         }
     }
