@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/drawable/ic_menu_report.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/drawable/ic_menu_send.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/drawable/ic_menu_share.xml" value="0.21302083333333333" />
+        <entry key="app/src/main/res/drawable/ic_swipe_delete.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/layout/app_bar_home.xml" value="0.16530797101449277" />
         <entry key="app/src/main/res/layout/card_delivery.xml" value="0.16530797101449277" />
@@ -18,7 +19,7 @@
         <entry key="app/src/main/res/layout/content_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_about.xml" value="0.15353260869565216" />
         <entry key="app/src/main/res/layout/fragment_delivery.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_delivery_detail.xml" value="0.161231884057971" />
+        <entry key="app/src/main/res/layout/fragment_delivery_detail.xml" value="0.11" />
         <entry key="app/src/main/res/layout/fragment_donate.xml" value="0.161231884057971" />
         <entry key="app/src/main/res/layout/fragment_donation_detail.xml" value="0.16530797101449277" />
         <entry key="app/src/main/res/layout/fragment_report.xml" value="0.1" />

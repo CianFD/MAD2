@@ -36,8 +36,8 @@ object DeliveryManager : DeliveryStore {
         })
     }
 
-    override fun findById(id:Long) : DeliveryModel? {
-        val foundDelivery: DeliveryModel? = deliveries.find { it.id == id }
+    override fun findById(id:String) : DeliveryModel? {
+        val foundDelivery: DeliveryModel? = deliveries.find { it._id == id }
         return foundDelivery
     }
 
@@ -58,6 +58,26 @@ object DeliveryManager : DeliveryStore {
 
             override fun onFailure(call: Call<DeliveryWrapper>, t: Throwable) {
                 Timber.i("Retrofit Error : $t.message")
+            }
+        })
+    }
+
+    override fun delete(id: String) {
+        val call = DeliveryClient.getApi().delete(id)
+
+        call.enqueue(object : Callback<DeliveryWrapper> {
+            override fun onResponse(call: Call<DeliveryWrapper>,
+                                    response: Response<DeliveryWrapper>
+            ) {
+                val deliveryWrapper = response.body()
+                if (deliveryWrapper != null) {
+                    Timber.i("Retrofit Delete ${deliveryWrapper.message}")
+                    Timber.i("Retrofit Delete ${deliveryWrapper.data.toString()}")
+                }
+            }
+
+            override fun onFailure(call: Call<DeliveryWrapper>, t: Throwable) {
+                Timber.i("Retrofit Delete Error : $t.message")
             }
         })
     }

@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class DeliveryModel(var id: Long = 0,
+data class DeliveryModel(var _id: String = "N/A",
+                         @SerializedName("type")
                          val type: String = "N/A",
-                         val amount: Int = 0,
-                         val message: String = "n/a") : Parcelable
+                         val message: String = "n/a",
+                         val amount: Int = 0) : Parcelable

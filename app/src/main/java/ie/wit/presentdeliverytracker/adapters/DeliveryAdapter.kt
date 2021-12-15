@@ -11,7 +11,7 @@ interface DeliveryClickListener {
     fun onDeliveryClick(delivery: DeliveryModel)
 }
 
-class DeliveryAdapter constructor(private var deliveries: List<DeliveryModel>,
+class DeliveryAdapter constructor(private var deliveries: ArrayList<DeliveryModel>,
                                   private val listener: DeliveryClickListener)
     : RecyclerView.Adapter<DeliveryAdapter.MainHolder>() {
 
@@ -27,13 +27,19 @@ class DeliveryAdapter constructor(private var deliveries: List<DeliveryModel>,
         holder.bind(delivery,listener)
     }
 
+    fun removeAt(position: Int) {
+        deliveries.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     override fun getItemCount(): Int = deliveries.size
 
     inner class MainHolder(val binding : CardDeliveryBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(delivery: DeliveryModel, listener: DeliveryClickListener) {
+            binding.root.tag = delivery._id
             binding.delivery = delivery
-            binding.imageIcon.setImageResource(R.mipmap.ic_launcher_round)
+            binding.imageIcon.setImageResource(R.drawable.present)
             binding.root.setOnClickListener { listener.onDeliveryClick(delivery) }
             binding.executePendingBindings()
         }
