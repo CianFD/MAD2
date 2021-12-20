@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "344713670252",
+    "project_id": "presenttracker-f3cd5",
+    "storage_bucket": "presenttracker-f3cd5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344713670252:android:cf096cc7cd889129b3b249",
+        "android_client_info": {
+          "package_name": "ie.wit.presentdeliverytrackerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344713670252-40ntc24e15suuhb003q2f3c6fq6mt3tg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaEPgatIPrxkIAqGtglySLMlvTkENn9Fo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344713670252-40ntc24e15suuhb003q2f3c6fq6mt3tg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

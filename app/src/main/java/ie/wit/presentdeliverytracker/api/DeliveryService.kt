@@ -6,19 +6,28 @@ import retrofit2.http.*
 
 interface DeliveryService {
     @GET("/deliveries")
-    fun getall(): Call<List<DeliveryModel>>
+    fun findall(): Call<List<DeliveryModel>>
 
-    @GET("/deliveries/{id}")
-    fun get(@Path("id") id: String): Call<DeliveryModel>
+    @GET("/deliveries/{email}")
+    fun findall(@Path("email") email: String?)
+            : Call<List<DeliveryModel>>
 
-    @DELETE("/deliveries/{id}")
-    fun delete(@Path("id") id: String): Call<DeliveryWrapper>
+    @GET("/deliveries/{email}/{id}")
+    fun get(@Path("email") email: String?,
+            @Path("id") id: String): Call<DeliveryModel>
 
-    @POST("/deliveries")
-    fun post(@Body delivery: DeliveryModel): Call<DeliveryWrapper>
+    @DELETE("/deliveries/{email}/{id}")
+    fun delete(@Path("email") email: String?,
+               @Path("id") id: String): Call<DeliveryWrapper>
 
-    @PUT("/deliveries/{id}")
-    fun put(@Path("id") id: String,
+    @POST("/deliveries/{email}")
+    fun post(@Path("email") email: String?,
+             @Body delivery: DeliveryModel)
+            : Call<DeliveryWrapper>
+
+    @PUT("/deliveries/{email}/{id}")
+    fun put(@Path("email") email: String?,
+            @Path("id") id: String,
             @Body delivery: DeliveryModel
     ): Call<DeliveryWrapper>
 }

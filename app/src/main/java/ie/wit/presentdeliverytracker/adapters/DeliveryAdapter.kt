@@ -37,7 +37,7 @@ class DeliveryAdapter constructor(private var deliveries: ArrayList<DeliveryMode
     inner class MainHolder(val binding : CardDeliveryBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(delivery: DeliveryModel, listener: DeliveryClickListener) {
-            binding.root.tag = delivery._id
+            binding.root.tag = delivery
             binding.delivery = delivery
             binding.imageIcon.setImageResource(R.drawable.present)
             binding.root.setOnClickListener { listener.onDeliveryClick(delivery) }

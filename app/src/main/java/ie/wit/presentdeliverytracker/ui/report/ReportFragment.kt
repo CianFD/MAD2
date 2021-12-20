@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -19,17 +20,17 @@ import ie.wit.presentdeliverytracker.adapters.DeliveryClickListener
 import ie.wit.presentdeliverytracker.databinding.FragmentReportBinding
 import ie.wit.presentdeliverytracker.main.PresentDeliveryTrackerApp
 import ie.wit.presentdeliverytracker.models.DeliveryModel
-import ie.wit.presentdeliverytracker.utils.SwipeToDeleteCallback
-import ie.wit.presentdeliverytracker.utils.createLoader
-import ie.wit.presentdeliverytracker.utils.hideLoader
-import ie.wit.presentdeliverytracker.utils.showLoader
+import ie.wit.presentdeliverytracker.ui.auth.LoggedInViewModel
+import ie.wit.presentdeliverytracker.utils.*
+
 
 class ReportFragment : Fragment(), DeliveryClickListener {
 
     lateinit var app: PresentDeliveryTrackerApp
     private var _fragBinding: FragmentReportBinding? = null
     private val fragBinding get() = _fragBinding!!
-    private lateinit var reportViewModel: ReportViewModel
+    private val reportViewModel: ReportViewModel by activityViewModels()
+    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     lateinit var loader : AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +46,7 @@ class ReportFragment : Fragment(), DeliveryClickListener {
         loader = createLoader(requireActivity())
 
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        reportViewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
-        showLoader(loader,"Downloading Donations")
+        showLoader(loader,"Downloading Deliveries")
         reportViewModel.observableDeliveriesList.observe(viewLifecycleOwner, Observer {
                 deliveries ->
             deliveries?.let {
@@ -68,12 +68,22 @@ class ReportFragment : Fragment(), DeliveryClickListener {
                 showLoader(loader,"Deleting Delivery")
                 val adapter = fragBinding.recyclerView.adapter as DeliveryAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
-                reportViewModel.delete(viewHolder.itemView.tag as String)
+                reportViewModel.delete(reportViewModel.liveFirebaseUser.value?.email!!,
+                    (viewHolder.itemView.tag as DeliveryModel)._id)
                 hideLoader(loader)
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
+
+        val swipeEditHandler = object : SwipeToEditCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                onDeliveryClick(viewHolder.itemView.tag as DeliveryModel)
+            }
+        }
+        val itemTouchEditHelper = ItemTouchHelper(swipeEditHandler)
+        itemTouchEditHelper.attachToRecyclerView(fragBinding.recyclerView)
+
 
         return root
     }
@@ -119,7 +129,13 @@ class ReportFragment : Fragment(), DeliveryClickListener {
 
     override fun onResume() {
         super.onResume()
-        reportViewModel.load()
+        showLoader(loader, "Downloading Delieries")
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
+            if (firebaseUser != null) {
+                reportViewModel.liveFirebaseUser.value = firebaseUser
+                reportViewModel.load()
+            }
+        })
     }
 
     override fun onDestroyView() {

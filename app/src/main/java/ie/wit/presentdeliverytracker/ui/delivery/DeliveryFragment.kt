@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -11,6 +12,7 @@ import androidx.navigation.ui.NavigationUI
 import ie.wit.presentdeliverytracker.R
 import ie.wit.presentdeliverytracker.databinding.FragmentDeliveryBinding
 import ie.wit.presentdeliverytracker.models.DeliveryModel
+import ie.wit.presentdeliverytracker.ui.auth.LoggedInViewModel
 import ie.wit.presentdeliverytracker.ui.report.ReportViewModel
 
 class DeliveryFragment : Fragment() {
@@ -21,6 +23,8 @@ class DeliveryFragment : Fragment() {
     // This property is only valid between onCreateView and onDestroyView.
     private val fragBinding get() = _fragBinding!!
     //lateinit var navController: NavController
+    private val reportViewModel: ReportViewModel by activityViewModels()
+    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private lateinit var deliveryViewModel: DeliveryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +88,9 @@ class DeliveryFragment : Fragment() {
                 totalDelivered += amount
                 layout.totalSoFar.text = "$$totalDelivered"
                 layout.progressBar.progress = totalDelivered
-                deliveryViewModel.addDelivery(DeliveryModel(type = type,amount = amount))
+                deliveryViewModel.addDelivery(DeliveryModel(type = type,amount = amount,
+                    email = loggedInViewModel.liveFirebaseUser.value?.email!!))
+
             }
         }
     }
@@ -110,11 +116,8 @@ class DeliveryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val reportViewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
-        reportViewModel.observableDeliveriesList.observe(viewLifecycleOwner, Observer {
-            totalDelivered = reportViewModel.observableDeliveriesList.value!!.sumBy { it.amount }
-            fragBinding.progressBar.progress = totalDelivered
-            fragBinding.totalSoFar.text = "$$totalDelivered"
-        })
+        totalDelivered = reportViewModel.observableDeliveriesList.value!!.sumOf { it.amount }
+        fragBinding.progressBar.progress = totalDelivered
+        fragBinding.totalSoFar.text = String.format(getString(R.string.totalSoFar),totalDelivered)
     }
 }

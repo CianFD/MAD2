@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 
 object DeliveryClient {
 
-    val serviceURL = "https://donationweb-hdip-server.herokuapp.com"
+    val serviceURL = "https://donationweb-hdip-mu-server.herokuapp.com"
 
     fun getApi() : DeliveryService {
 

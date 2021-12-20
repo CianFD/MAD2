@@ -52,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="4dp"
+            android:text="@={deliveryvm.observableDelivery.message}"
             android:textAlignment="viewStart"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,6 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="4dp"
+            android:text="@={``+ deliveryvm.observableDelivery.pats}"
             android:ems="10"
             android:inputType="number"
             android:textSize="24sp"
@@ -92,7 +94,7 @@
             android:inputType="number"
             android:textAlignment="viewStart"
             android:textSize="24sp"
-            android:text="@{Integer.toString(deliveryvm.observableDelivery.amount)}"
+            android:text="@={``+ deliveryvm.observableDelivery.amount}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -130,7 +132,7 @@
             android:id="@+id/editDeliveryButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Edit"
+            android:text="@string/update"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/deleteDeliveryButton"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -140,7 +142,7 @@
             android:id="@+id/deleteDeliveryButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="@string/delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/editDeliveryButton" />
