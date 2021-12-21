@@ -1,6 +1,7 @@
 package ie.wit.presentdeliverytracker.models
 
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseUser
 import ie.wit.presentdeliverytracker.api.DeliveryClient
 import ie.wit.presentdeliverytracker.api.DeliveryWrapper
 import timber.log.Timber
@@ -64,7 +65,7 @@ object DeliveryManager : DeliveryStore {
         })
     }
 
-    override fun create(delivery: DeliveryModel) {
+    override fun create(firebaseUser: MutableLiveData<FirebaseUser>, delivery: DeliveryModel) {
 
         val call = DeliveryClient.getApi().post(delivery.email, delivery)
         Timber.i("Retrofit ${call.toString()}")

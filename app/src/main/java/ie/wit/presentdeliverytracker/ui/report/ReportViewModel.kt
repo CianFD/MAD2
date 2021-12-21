@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
+import ie.wit.presentdeliverytracker.firebase.FirebaseDBManager
 import ie.wit.presentdeliverytracker.models.DeliveryManager
 import ie.wit.presentdeliverytracker.models.DeliveryModel
 import timber.log.Timber
@@ -30,9 +31,10 @@ class ReportViewModel : ViewModel() {
         }
     }
 
-    fun delete(email: String, id: String) {
+    fun delete(userid: String, id: String) {
         try {
-            DeliveryManager.delete(email,id)
+            //DonationManager.delete(userid,id)
+            FirebaseDBManager.delete(userid,id)
             Timber.i("Report Delete Success")
         }
         catch (e: Exception) {

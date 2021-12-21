@@ -3,6 +3,7 @@ package ie.wit.presentdeliverytracker.ui.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ie.wit.presentdeliverytracker.firebase.FirebaseDBManager
 import ie.wit.presentdeliverytracker.models.DeliveryManager
 import ie.wit.presentdeliverytracker.models.DeliveryModel
 import timber.log.Timber
@@ -14,19 +15,20 @@ class DeliveryDetailViewModel : ViewModel() {
         get() = delivery
         set(value) {delivery.value = value.value}
 
-    fun getDelivery(email:String, id: String) {
+    fun getDelivery(userid:String, id: String) {
         try {
-            DeliveryManager.findById(email, id, delivery)
-            Timber.i("Detail getDelivery() Success : ${delivery.value.toString()}")
+            FirebaseDBManager.findById(userid, id, delivery)
+            Timber.i("Detail getDelivery() Success : ${
+                delivery.value.toString()}")
         }
         catch (e: Exception) {
             Timber.i("Detail getDelivery() Error : $e.message")
         }
     }
 
-    fun updateDelivery(email:String, id: String,delivery: DeliveryModel) {
+    fun updateDelivery(userid:String, id: String,delivery: DeliveryModel) {
         try {
-            DeliveryManager.update(email, id, delivery)
+            FirebaseDBManager.update(userid, id, delivery)
             Timber.i("Detail update() Success : $delivery")
         }
         catch (e: Exception) {

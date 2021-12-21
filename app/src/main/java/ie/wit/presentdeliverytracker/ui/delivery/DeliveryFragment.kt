@@ -88,8 +88,8 @@ class DeliveryFragment : Fragment() {
                 totalDelivered += amount
                 layout.totalSoFar.text = "$$totalDelivered"
                 layout.progressBar.progress = totalDelivered
-                deliveryViewModel.addDelivery(DeliveryModel(type = type,amount = amount,
-                    email = loggedInViewModel.liveFirebaseUser.value?.email!!))
+                deliveryViewModel.addDelivery(loggedInViewModel.liveFirebaseUser,
+                    DeliveryModel(type = type, amount = amount, email = loggedInViewModel.liveFirebaseUser.value?.email!!))
 
             }
         }

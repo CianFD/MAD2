@@ -26,12 +26,11 @@ import ie.wit.presentdeliverytracker.utils.*
 
 class ReportFragment : Fragment(), DeliveryClickListener {
 
-    lateinit var app: PresentDeliveryTrackerApp
     private var _fragBinding: FragmentReportBinding? = null
     private val fragBinding get() = _fragBinding!!
+    lateinit var loader : AlertDialog
     private val reportViewModel: ReportViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    lateinit var loader : AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +45,10 @@ class ReportFragment : Fragment(), DeliveryClickListener {
         loader = createLoader(requireActivity())
 
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        fragBinding.fab.setOnClickListener {
+            val action = ReportFragmentDirections.actionReportFragmentToDeliveryFragment()
+            findNavController().navigate(action)
+        }
         showLoader(loader,"Downloading Deliveries")
         reportViewModel.observableDeliveriesList.observe(viewLifecycleOwner, Observer {
                 deliveries ->
@@ -56,11 +59,6 @@ class ReportFragment : Fragment(), DeliveryClickListener {
             }
         })
 
-        fragBinding.fab.setOnClickListener {
-            val action = ReportFragmentDirections.actionReportFragmentToDeliveryFragment()
-            findNavController().navigate(action)
-        }
-
         setSwipeRefresh()
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
@@ -68,13 +66,14 @@ class ReportFragment : Fragment(), DeliveryClickListener {
                 showLoader(loader,"Deleting Delivery")
                 val adapter = fragBinding.recyclerView.adapter as DeliveryAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
-                reportViewModel.delete(reportViewModel.liveFirebaseUser.value?.email!!,
-                    (viewHolder.itemView.tag as DeliveryModel)._id)
+                reportViewModel.delete(reportViewModel.liveFirebaseUser.value?.uid!!,
+                    (viewHolder.itemView.tag as DeliveryModel).uid!!)
                 hideLoader(loader)
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
+
 
         val swipeEditHandler = object : SwipeToEditCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -84,9 +83,9 @@ class ReportFragment : Fragment(), DeliveryClickListener {
         val itemTouchEditHelper = ItemTouchHelper(swipeEditHandler)
         itemTouchEditHelper.attachToRecyclerView(fragBinding.recyclerView)
 
-
         return root
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_report, menu)
@@ -110,11 +109,11 @@ class ReportFragment : Fragment(), DeliveryClickListener {
     }
 
     override fun onDeliveryClick(delivery: DeliveryModel) {
-        val action = ReportFragmentDirections.actionReportFragmentToDeliveryDetailFragment(delivery._id)
+        val action = ReportFragmentDirections.actionReportFragmentToDeliveryDetailFragment(delivery.uid!!)
         findNavController().navigate(action)
     }
 
-    fun setSwipeRefresh() {
+    private fun setSwipeRefresh() {
         fragBinding.swiperefresh.setOnRefreshListener {
             fragBinding.swiperefresh.isRefreshing = true
             showLoader(loader,"Downloading Deliveries")
@@ -122,14 +121,14 @@ class ReportFragment : Fragment(), DeliveryClickListener {
         }
     }
 
-    fun checkSwipeRefresh() {
+    private fun checkSwipeRefresh() {
         if (fragBinding.swiperefresh.isRefreshing)
             fragBinding.swiperefresh.isRefreshing = false
     }
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader, "Downloading Delieries")
+        showLoader(loader,"Downloading Deliveries")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
             if (firebaseUser != null) {
                 reportViewModel.liveFirebaseUser.value = firebaseUser
