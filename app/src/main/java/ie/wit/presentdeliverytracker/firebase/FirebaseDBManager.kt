@@ -106,4 +106,25 @@ object FirebaseDBManager : DeliveryStore {
 
         database.updateChildren(childUpdate)
     }
+
+    fun updateImageRef(userid: String,imageUri: String) {
+
+        val userDeliveries = database.child("user-deliveries").child(userid)
+        val allDeliveries = database.child("deliveries")
+
+        userDeliveries.addListenerForSingleValueEvent(
+            object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+
+                        it.ref.child("profilepic").setValue(imageUri)
+
+                        val delivery = it.getValue(DeliveryModel::class.java)
+                        allDeliveries.child(delivery!!.uid!!)
+                            .child("profilepic").setValue(imageUri)
+                    }
+                }
+            })
+    }
 }

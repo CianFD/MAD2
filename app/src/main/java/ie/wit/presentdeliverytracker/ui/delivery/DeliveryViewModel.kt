@@ -17,6 +17,7 @@ class DeliveryViewModel : ViewModel() {
 
     fun addDelivery(firebaseUser: MutableLiveData<FirebaseUser>,
                     delivery: DeliveryModel) {
+        delivery.profilepic = FirebaseImageManager.imageUri.value.toString()
         status.value = try {
             FirebaseDBManager.create(firebaseUser,delivery)
             true

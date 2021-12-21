@@ -12,8 +12,9 @@ data class DeliveryModel(
     var uid: String? = "",
     var type: String = "N/A",
     var amount: Int = 0,
-    var message: String = "a message",
+    var message: String = "Homer for President!",
     var pats: Int = 0,
+    var profilepic: String = "",
     var email: String? = "joe@bloggs.com")
     : Parcelable
 {
@@ -25,6 +26,7 @@ data class DeliveryModel(
             "amount" to amount,
             "message" to message,
             "pats" to pats,
+            "profilepic" to profilepic,
             "email" to email
         )
     }

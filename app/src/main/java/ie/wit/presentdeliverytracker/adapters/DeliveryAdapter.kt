@@ -2,10 +2,13 @@ package ie.wit.presentdeliverytracker.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import ie.wit.presentdeliverytracker.R
 import ie.wit.presentdeliverytracker.databinding.CardDeliveryBinding
 import ie.wit.presentdeliverytracker.models.DeliveryModel
+import ie.wit.presentdeliverytracker.utils.customTransformation
 
 interface DeliveryClickListener {
     fun onDeliveryClick(delivery: DeliveryModel)
@@ -43,7 +46,11 @@ class DeliveryAdapter constructor(private var deliveries: ArrayList<DeliveryMode
         fun bind(delivery: DeliveryModel, listener: DeliveryClickListener) {
             binding.root.tag = delivery
             binding.delivery = delivery
-            binding.imageIcon.setImageResource(R.drawable.present)
+            Picasso.get().load(delivery.profilepic.toUri())
+                .resize(200, 200)
+                .transform(customTransformation())
+                .centerCrop()
+                .into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onDeliveryClick(delivery) }
             binding.executePendingBindings()
         }

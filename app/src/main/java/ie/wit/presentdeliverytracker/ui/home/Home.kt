@@ -1,8 +1,12 @@
 package ie.wit.presentdeliverytracker.ui.home
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +20,12 @@ import ie.wit.presentdeliverytracker.databinding.HomeBinding
 import ie.wit.presentdeliverytracker.databinding.NavHeaderBinding
 import androidx.lifecycle.Observer
 import com.squareup.picasso.Picasso
+import ie.wit.presentdeliverytracker.firebase.FirebaseImageManager
 import ie.wit.presentdeliverytracker.utils.customTransformation
+import ie.wit.presentdeliverytracker.utils.readImageUri
+import ie.wit.presentdeliverytracker.utils.showImagePicker
+import timber.log.Timber
+
 
 class Home : AppCompatActivity() {
 
@@ -25,6 +34,8 @@ class Home : AppCompatActivity() {
     private lateinit var navHeaderBinding : NavHeaderBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var loggedInViewModel : LoggedInViewModel
+    private lateinit var headerView : View
+    private lateinit var intentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +45,7 @@ class Home : AppCompatActivity() {
         drawerLayout = homeBinding.drawerLayout
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        initNavHeader()
 
         val navController = findNavController(R.id.nav_host_fragment)
 
@@ -61,22 +73,42 @@ class Home : AppCompatActivity() {
                 startActivity(Intent(this, Login::class.java))
             }
         })
-
+        registerImagePickerCallback()
     }
 
     private fun updateNavHeader(currentUser: FirebaseUser) {
-        var headerView = homeBinding.navView.getHeaderView(0)
-        navHeaderBinding = NavHeaderBinding.bind(headerView)
-        if(currentUser.photoUrl != null && currentUser.displayName != null) {
-            navHeaderBinding.navHeaderName.text = currentUser.displayName
-            Picasso.get().load(currentUser.photoUrl)
-                .resize(200, 200)
-                .transform(customTransformation())
-                .centerCrop()
-                .into(navHeaderBinding.navHeaderImage)
-        }
-        navHeaderBinding.navHeaderName.text = currentUser.displayName
+        FirebaseImageManager.imageUri.observe(this, { result ->
+            if(result == Uri.EMPTY) {
+                Timber.i("DX NO Existing imageUri")
+                if (currentUser.photoUrl != null) {
+                    //if you're a google user
+                    FirebaseImageManager.updateUserImage(
+                        currentUser.uid,
+                        currentUser.photoUrl,
+                        navHeaderBinding.navHeaderImage,
+                        false)
+                }
+                else
+                {
+                    Timber.i("DX Loading Existing Default imageUri")
+                    FirebaseImageManager.updateDefaultImage(
+                        currentUser.uid,
+                        R.drawable.buddy_face,
+                        navHeaderBinding.navHeaderImage)
+                }
+            }
+            else // load existing image from firebase
+            {
+                Timber.i("DX Loading Existing imageUri")
+                FirebaseImageManager.updateUserImage(
+                    currentUser.uid,
+                    FirebaseImageManager.imageUri.value,
+                    navHeaderBinding.navHeaderImage, false)
+            }
+        })
         navHeaderBinding.navHeaderEmail.text = currentUser.email
+        if(currentUser.displayName != null)
+            navHeaderBinding.navHeaderName.text = currentUser.displayName
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -90,5 +122,34 @@ class Home : AppCompatActivity() {
         val intent = Intent(this, Login::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+
+    private fun initNavHeader() {
+        Timber.i("DX Init Nav Header")
+        headerView = homeBinding.navView.getHeaderView(0)
+        navHeaderBinding = NavHeaderBinding.bind(headerView)
+
+        navHeaderBinding.navHeaderImage.setOnClickListener {
+            showImagePicker(intentLauncher)
+        }
+    }
+
+    private fun registerImagePickerCallback() {
+        intentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when(result.resultCode){
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            Timber.i("DX registerPickerCallback() ${readImageUri(result.resultCode, result.data).toString()}")
+                            FirebaseImageManager
+                                .updateUserImage(loggedInViewModel.liveFirebaseUser.value!!.uid,
+                                    readImageUri(result.resultCode, result.data),
+                                    navHeaderBinding.navHeaderImage,
+                                    true)
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
     }
 }
