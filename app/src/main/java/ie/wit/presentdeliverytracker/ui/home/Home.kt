@@ -15,6 +15,8 @@ import ie.wit.presentdeliverytracker.ui.auth.Login
 import ie.wit.presentdeliverytracker.databinding.HomeBinding
 import ie.wit.presentdeliverytracker.databinding.NavHeaderBinding
 import androidx.lifecycle.Observer
+import com.squareup.picasso.Picasso
+import ie.wit.presentdeliverytracker.utils.customTransformation
 
 class Home : AppCompatActivity() {
 
@@ -65,6 +67,15 @@ class Home : AppCompatActivity() {
     private fun updateNavHeader(currentUser: FirebaseUser) {
         var headerView = homeBinding.navView.getHeaderView(0)
         navHeaderBinding = NavHeaderBinding.bind(headerView)
+        if(currentUser.photoUrl != null && currentUser.displayName != null) {
+            navHeaderBinding.navHeaderName.text = currentUser.displayName
+            Picasso.get().load(currentUser.photoUrl)
+                .resize(200, 200)
+                .transform(customTransformation())
+                .centerCrop()
+                .into(navHeaderBinding.navHeaderImage)
+        }
+        navHeaderBinding.navHeaderName.text = currentUser.displayName
         navHeaderBinding.navHeaderEmail.text = currentUser.email
     }
 

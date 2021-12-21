@@ -3,6 +3,7 @@ package ie.wit.presentdeliverytracker.ui.report
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -89,6 +90,17 @@ class ReportFragment : Fragment(), DeliveryClickListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_report, menu)
+
+        val item = menu.findItem(R.id.toggleDonations) as MenuItem
+        item.setActionView(R.layout.togglebutton_layout)
+        val toggleDeliveries: SwitchCompat = item.actionView.findViewById(R.id.toggleButton)
+        toggleDeliveries.isChecked = false
+
+        toggleDeliveries.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) reportViewModel.loadAll()
+            else reportViewModel.load()
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -99,7 +111,7 @@ class ReportFragment : Fragment(), DeliveryClickListener {
 
     private fun render(deliveriesList: ArrayList<DeliveryModel>) {
         fragBinding.recyclerView.adapter = DeliveryAdapter(deliveriesList,this)
-        if (deliveriesList.isEmpty()) {
+        if (reportViewModel.readOnly.value!!) {
             fragBinding.recyclerView.visibility = View.GONE
             fragBinding.deliveriesNotFound.visibility = View.VISIBLE
         } else {
@@ -110,14 +122,18 @@ class ReportFragment : Fragment(), DeliveryClickListener {
 
     override fun onDeliveryClick(delivery: DeliveryModel) {
         val action = ReportFragmentDirections.actionReportFragmentToDeliveryDetailFragment(delivery.uid!!)
-        findNavController().navigate(action)
+        if(!reportViewModel.readOnly.value!!)
+            findNavController().navigate(action)
     }
 
     private fun setSwipeRefresh() {
         fragBinding.swiperefresh.setOnRefreshListener {
             fragBinding.swiperefresh.isRefreshing = true
             showLoader(loader,"Downloading Deliveries")
-            reportViewModel.load()
+            if(reportViewModel.readOnly.value!!)
+                reportViewModel.loadAll()
+            else
+                reportViewModel.load()
         }
     }
 

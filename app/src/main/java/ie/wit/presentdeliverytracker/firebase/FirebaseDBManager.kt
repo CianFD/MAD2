@@ -12,8 +12,26 @@ object FirebaseDBManager : DeliveryStore {
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
 
-    override fun findAll(deliveriesList: MutableLiveData<List<DeliveryModel>>) {
-        TODO("Not yet implemented")
+    override fun findAll(deliverieList: MutableLiveData<List<DeliveryModel>>) {
+        database.child("deliveries")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase Delivery error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val localList = ArrayList<DeliveryModel>()
+                    val children = snapshot.children
+                    children.forEach {
+                        val delivery = it.getValue(DeliveryModel::class.java)
+                        localList.add(delivery!!)
+                    }
+                    database.child("deliveries")
+                        .removeEventListener(this)
+
+                    deliverieList.value = localList
+                }
+            })
     }
 
     override fun findAll(userid: String, deliveriesList: MutableLiveData<List<DeliveryModel>>) {

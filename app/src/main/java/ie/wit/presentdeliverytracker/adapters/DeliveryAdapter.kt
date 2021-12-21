@@ -12,14 +12,15 @@ interface DeliveryClickListener {
 }
 
 class DeliveryAdapter constructor(private var deliveries: ArrayList<DeliveryModel>,
-                                  private val listener: DeliveryClickListener)
+                                  private val listener: DeliveryClickListener,
+                                  private val readOnly: Boolean)
     : RecyclerView.Adapter<DeliveryAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardDeliveryBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return MainHolder(binding)
+        return MainHolder(binding,readOnly)
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
@@ -34,7 +35,10 @@ class DeliveryAdapter constructor(private var deliveries: ArrayList<DeliveryMode
 
     override fun getItemCount(): Int = deliveries.size
 
-    inner class MainHolder(val binding : CardDeliveryBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MainHolder(val binding : CardDeliveryBinding, private val readOnly : Boolean) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        val readOnlyRow = readOnly
 
         fun bind(delivery: DeliveryModel, listener: DeliveryClickListener) {
             binding.root.tag = delivery
