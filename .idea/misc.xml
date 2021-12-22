@@ -27,7 +27,7 @@
         <entry key="app/src/main/res/layout/fragment_report.xml" value="0.1" />
         <entry key="app/src/main/res/layout/home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/loading.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/login.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/login.xml" value="0.165" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.165" />
         <entry key="app/src/main/res/layout/togglebutton_layout.xml" value="0.196875" />
         <entry key="app/src/main/res/menu/menu_about.xml" value="0.1" />

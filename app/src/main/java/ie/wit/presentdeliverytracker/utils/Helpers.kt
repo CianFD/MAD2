@@ -44,14 +44,6 @@ fun serviceUnavailableMessage(activity: FragmentActivity) {
     ).show()
 }
 
-fun serviceAvailableMessage(activity: FragmentActivity) {
-    Toast.makeText(
-        activity,
-        "Delivery Tracker Contacted Successfully",
-        Toast.LENGTH_LONG
-    ).show()
-}
-
 fun customTransformation() : Transformation =
     RoundedTransformationBuilder()
         .borderColor(Color.WHITE)

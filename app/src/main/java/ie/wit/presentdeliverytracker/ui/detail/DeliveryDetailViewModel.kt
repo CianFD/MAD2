@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ie.wit.presentdeliverytracker.firebase.FirebaseDBManager
-import ie.wit.presentdeliverytracker.models.DeliveryManager
 import ie.wit.presentdeliverytracker.models.DeliveryModel
 import timber.log.Timber
 

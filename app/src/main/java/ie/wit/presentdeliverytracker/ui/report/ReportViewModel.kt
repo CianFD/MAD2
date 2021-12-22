@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import ie.wit.presentdeliverytracker.firebase.FirebaseDBManager
-import ie.wit.presentdeliverytracker.models.DeliveryManager
 import ie.wit.presentdeliverytracker.models.DeliveryModel
 import timber.log.Timber
 
@@ -25,7 +24,8 @@ class ReportViewModel : ViewModel() {
     fun load() {
         try {
             readOnly.value = false
-            DeliveryManager.findAll(liveFirebaseUser.value?.email!!, deliveriesList)
+            FirebaseDBManager.findAll(liveFirebaseUser.value?.uid!!,
+                deliveriesList)
             Timber.i("Report Load Success : ${deliveriesList.value.toString()}")
         }
         catch (e: Exception) {
@@ -46,7 +46,6 @@ class ReportViewModel : ViewModel() {
 
     fun delete(userid: String, id: String) {
         try {
-            //DonationManager.delete(userid,id)
             FirebaseDBManager.delete(userid,id)
             Timber.i("Report Delete Success")
         }

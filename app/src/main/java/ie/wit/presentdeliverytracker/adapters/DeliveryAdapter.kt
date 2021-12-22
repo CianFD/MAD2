@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import ie.wit.presentdeliverytracker.R
 import ie.wit.presentdeliverytracker.databinding.CardDeliveryBinding
@@ -50,6 +51,7 @@ class DeliveryAdapter constructor(private var deliveries: ArrayList<DeliveryMode
                 .resize(200, 200)
                 .transform(customTransformation())
                 .centerCrop()
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
                 .into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onDeliveryClick(delivery) }
             binding.executePendingBindings()

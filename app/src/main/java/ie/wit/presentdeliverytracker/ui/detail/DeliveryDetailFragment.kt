@@ -35,33 +35,29 @@ class DeliveryDetailFragment : Fragment() {
         detailViewModel.observableDelivery.observe(viewLifecycleOwner, Observer { render() })
 
         fragBinding.editDeliveryButton.setOnClickListener {
-            detailViewModel.updateDelivery(loggedInViewModel.liveFirebaseUser.value?.email!!,
+            detailViewModel.updateDelivery(loggedInViewModel.liveFirebaseUser.value?.uid!!,
                 args.deliveryid, fragBinding.deliveryvm?.observableDelivery!!.value!!)
-            //Force Reload of list to guarantee refresh
+
             reportViewModel.load()
             findNavController().navigateUp()
-            //findNavController().popBackStack()
-
         }
 
         fragBinding.deleteDeliveryButton.setOnClickListener {
-            reportViewModel.delete(loggedInViewModel.liveFirebaseUser.value?.email!!,
-                detailViewModel.observableDelivery.value?._id!!)
+            reportViewModel.delete(loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                detailViewModel.observableDelivery.value?.uid!!)
             findNavController().navigateUp()
         }
         return root
     }
 
     private fun render() {
-        fragBinding.editMessage.setText("A Message")
-        fragBinding.editPats.setText("0")
         fragBinding.deliveryvm = detailViewModel
         Timber.i("Retrofit fragBinding.deliveryvm == $fragBinding.deliveryvm")
     }
 
     override fun onResume() {
         super.onResume()
-        detailViewModel.getDelivery(loggedInViewModel.liveFirebaseUser.value?.email!!,
+        detailViewModel.getDelivery(loggedInViewModel.liveFirebaseUser.value?.uid!!,
             args.deliveryid)
 
     }

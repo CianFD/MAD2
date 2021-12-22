@@ -34,9 +34,9 @@ object FirebaseImageManager {
     }
 
     fun uploadImageToFirebase(userid: String, bitmap: Bitmap, updating : Boolean) {
-        // Get the data from an ImageView as bytes
+
         val imageRef = storage.child("photos").child("${userid}.jpg")
-        //val bitmap = (imageView as BitmapDrawable).bitmap
+
         val baos = ByteArrayOutputStream()
         lateinit var uploadTask: UploadTask
 
@@ -84,7 +84,9 @@ object FirebaseImageManager {
                     Timber.i("DX onBitmapFailed $e")
                 }
 
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                    Timber.i("DX onPrepareLoad $placeHolderDrawable")
+                }
             })
     }
 
@@ -108,7 +110,9 @@ object FirebaseImageManager {
                     Timber.i("DX onBitmapFailed $e")
                 }
 
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                    Timber.i("DX onPrepareLoad $placeHolderDrawable")
+                }
             })
     }
 }

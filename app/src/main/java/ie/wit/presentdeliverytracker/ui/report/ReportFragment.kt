@@ -91,7 +91,7 @@ class ReportFragment : Fragment(), DeliveryClickListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_report, menu)
 
-        val item = menu.findItem(R.id.toggleDonations) as MenuItem
+        val item = menu.findItem(R.id.toggleDeliveries) as MenuItem
         item.setActionView(R.layout.togglebutton_layout)
         val toggleDeliveries: SwitchCompat = item.actionView.findViewById(R.id.toggleButton)
         toggleDeliveries.isChecked = false
@@ -110,8 +110,8 @@ class ReportFragment : Fragment(), DeliveryClickListener {
     }
 
     private fun render(deliveriesList: ArrayList<DeliveryModel>) {
-        fragBinding.recyclerView.adapter = DeliveryAdapter(deliveriesList,this)
-        if (reportViewModel.readOnly.value!!) {
+        fragBinding.recyclerView.adapter = DeliveryAdapter(deliveriesList,this,reportViewModel.readOnly.value!!)
+        if (deliveriesList.isEmpty()) {
             fragBinding.recyclerView.visibility = View.GONE
             fragBinding.deliveriesNotFound.visibility = View.VISIBLE
         } else {

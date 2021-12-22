@@ -12,7 +12,7 @@ object FirebaseDBManager : DeliveryStore {
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
 
-    override fun findAll(deliverieList: MutableLiveData<List<DeliveryModel>>) {
+    override fun findAll(deliveriesList: MutableLiveData<List<DeliveryModel>>) {
         database.child("deliveries")
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
@@ -29,7 +29,7 @@ object FirebaseDBManager : DeliveryStore {
                     database.child("deliveries")
                         .removeEventListener(this)
 
-                    deliverieList.value = localList
+                    deliveriesList.value = localList
                 }
             })
     }

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import ie.wit.presentdeliverytracker.firebase.FirebaseDBManager
-import ie.wit.presentdeliverytracker.models.DeliveryManager
+import ie.wit.presentdeliverytracker.firebase.FirebaseImageManager
 import ie.wit.presentdeliverytracker.models.DeliveryModel
 
 class DeliveryViewModel : ViewModel() {
@@ -17,8 +17,8 @@ class DeliveryViewModel : ViewModel() {
 
     fun addDelivery(firebaseUser: MutableLiveData<FirebaseUser>,
                     delivery: DeliveryModel) {
-        delivery.profilepic = FirebaseImageManager.imageUri.value.toString()
         status.value = try {
+            delivery.profilepic = FirebaseImageManager.imageUri.value.toString()
             FirebaseDBManager.create(firebaseUser,delivery)
             true
         } catch (e: IllegalArgumentException) {

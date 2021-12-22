@@ -17,28 +17,28 @@ import ie.wit.presentdeliverytracker.ui.report.ReportViewModel
 
 class DeliveryFragment : Fragment() {
 
-    //lateinit var app: PresentDeliveryTrackerApp
+
     var totalDelivered = 0
     private var _fragBinding: FragmentDeliveryBinding? = null
-    // This property is only valid between onCreateView and onDestroyView.
+
     private val fragBinding get() = _fragBinding!!
-    //lateinit var navController: NavController
+
     private val reportViewModel: ReportViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private lateinit var deliveryViewModel: DeliveryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //app = activity?.application as PresentDeliveryTrackerApp
+
         setHasOptionsMenu(true)
-        //navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _fragBinding = FragmentDeliveryBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = getString(R.string.action_main)
+
 
         deliveryViewModel = ViewModelProvider(this).get(DeliveryViewModel::class.java)
         deliveryViewModel.observableStatus.observe(viewLifecycleOwner, Observer {
@@ -50,20 +50,13 @@ class DeliveryFragment : Fragment() {
         fragBinding.NumberOfPresents.maxValue = 1000
 
         fragBinding.NumberOfPresents.setOnValueChangedListener { _, _, newVal ->
-            //Display the newly selected number to paymentAmount
+
             fragBinding.presentAmount.setText("$newVal")
         }
         setButtonListener(fragBinding)
         return root;
     }
 
-//    companion object {
-//        @JvmStatic
-//        fun newInstance() =
-//                DeliveryFragment().apply {
-//                    arguments = Bundle().apply {}
-//                }
-//    }
 
     private fun render(status: Boolean) {
         when (status) {
@@ -86,7 +79,7 @@ class DeliveryFragment : Fragment() {
             else {
                 val type = if(layout.type.checkedRadioButtonId == R.id.Gift) "Gift" else "Coal"
                 totalDelivered += amount
-                layout.totalSoFar.text = "$$totalDelivered"
+                layout.totalSoFar.text = String.format(getString(R.string.totalSoFar),totalDelivered)
                 layout.progressBar.progress = totalDelivered
                 deliveryViewModel.addDelivery(loggedInViewModel.liveFirebaseUser,
                     DeliveryModel(type = type, amount = amount, email = loggedInViewModel.liveFirebaseUser.value?.email!!))
@@ -104,10 +97,6 @@ class DeliveryFragment : Fragment() {
         return NavigationUI.onNavDestinationSelected(item,
                 requireView().findNavController()) || super.onOptionsItemSelected(item)
     }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

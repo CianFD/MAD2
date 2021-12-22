@@ -40,11 +40,15 @@ class Login : AppCompatActivity() {
         }
         loginBinding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
         loginBinding.googleSignInButton.setColorScheme(0)
+
+        loginBinding.googleSignInButton.setOnClickListener {
+            googleSignIn()
+        }
     }
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
+
         loginRegisterViewModel = ViewModelProvider(this).get(LoginRegisterViewModel::class.java)
         loginRegisterViewModel.liveFirebaseUser.observe(this, Observer
         { firebaseUser -> if (firebaseUser != null)
@@ -52,6 +56,7 @@ class Login : AppCompatActivity() {
 
         loginRegisterViewModel.firebaseAuthManager.errorStatus.observe(this, Observer
         { status -> checkStatus(status) })
+        setupGoogleSignInCallback()
     }
 
     //Required to exit app from Login Screen - must investigate this further
@@ -123,7 +128,7 @@ class Login : AppCompatActivity() {
                         } catch (e: ApiException) {
                             // Google Sign In failed
                             Timber.i( "Google sign in failed $e")
-                            Snackbar.make(loginBinding.login, "Authentication Failed.",
+                            Snackbar.make(loginBinding.loginLayout, "Authentication Failed.",
                                 Snackbar.LENGTH_SHORT).show()
                         }
                         Timber.i("DeliveryTrackerApp Google Result $result.data")

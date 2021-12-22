@@ -12,10 +12,10 @@ data class DeliveryModel(
     var uid: String? = "",
     var type: String = "N/A",
     var amount: Int = 0,
-    var message: String = "Homer for President!",
+    var message: String = "Cindy's Bike delivered!",
     var pats: Int = 0,
     var profilepic: String = "",
-    var email: String? = "joe@bloggs.com")
+    var email: String? = "buddytheelf@thenorthpole.com")
     : Parcelable
 {
     @Exclude

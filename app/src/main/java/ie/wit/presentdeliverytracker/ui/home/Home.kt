@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,7 +46,6 @@ class Home : AppCompatActivity() {
         drawerLayout = homeBinding.drawerLayout
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        initNavHeader()
 
         val navController = findNavController(R.id.nav_host_fragment)
 
@@ -58,17 +58,18 @@ class Home : AppCompatActivity() {
 
         val navView = homeBinding.navView
         navView.setupWithNavController(navController)
+        initNavHeader()
     }
 
     public override fun onStart() {
         super.onStart()
         loggedInViewModel = ViewModelProvider(this).get(LoggedInViewModel::class.java)
-        loggedInViewModel.liveFirebaseUser.observe(this, Observer { firebaseUser ->
+        loggedInViewModel.liveFirebaseUser.observe(this, { firebaseUser ->
             if (firebaseUser != null)
-                updateNavHeader(loggedInViewModel.liveFirebaseUser.value!!)
+                updateNavHeader(firebaseUser)
         })
 
-        loggedInViewModel.loggedOut.observe(this, Observer { loggedout ->
+        loggedInViewModel.loggedOut.observe(this, { loggedout ->
             if (loggedout) {
                 startActivity(Intent(this, Login::class.java))
             }
@@ -116,9 +117,8 @@ class Home : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun signOut() {
+    fun signOut(item: MenuItem) {
         loggedInViewModel.logOut()
-        //Launch Login activity and clear the back stack to stop navigating back to the Home activity
         val intent = Intent(this, Login::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
@@ -146,7 +146,7 @@ class Home : AppCompatActivity() {
                                     readImageUri(result.resultCode, result.data),
                                     navHeaderBinding.navHeaderImage,
                                     true)
-                        } // end of if
+                        }
                     }
                     RESULT_CANCELED -> { } else -> { }
                 }
