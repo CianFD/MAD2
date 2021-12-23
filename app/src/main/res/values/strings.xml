@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Present Delivery Tracker App</string>
-    <string name="mainTitle">Welcome Buddy</string>
-    <string name="mainSubtitle">Track Your Elves Progress</string>
+    <string name="mainTitle">Welcome</string>
+    <string name="mainSubtitle">Track The Elves Progress</string>
     <string name="addButton">Add Presents</string>
     <string name="gift">Gift</string>
     <string name="coal">Coal</string>
     <string name="amount">Number of Presents : </string>
     <string name="total">Total so Far</string>
-    <string name="totalSoFar">$ Total</string>
+    <string name="totalSoFar">Total</string>
     <string name="reportTitle">Present Report</string>
     <string name="defaultAmount">00</string>
     <string name="defaultMethod">N/A</string>

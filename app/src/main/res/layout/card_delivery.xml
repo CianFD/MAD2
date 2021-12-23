@@ -23,16 +23,16 @@
 
             <ImageView
                 android:id="@+id/imageIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginEnd="16dp"
                 android:contentDescription="@string/app_name"
-                app:srcCompat="@drawable/ic_menu_delivery" />
+                app:srcCompat="@drawable/present" />
 
             <TextView
-                android:id="@+id/amountOfPresents"
+                android:id="@+id/presentAmount"
                 android:layout_width="87dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -42,7 +42,7 @@
                 android:text="@{Integer.toString(delivery.amount)}"
                 android:textColor="@color/black"
                 android:textSize="24sp"
-                tools:text="€1000" />
+                tools:text="10" />
 
             <TextView
                 android:id="@+id/type"
@@ -51,7 +51,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="8dp"
-                android:layout_toEndOf="@+id/amountOfPresents"
+                android:layout_toEndOf="@+id/presentAmount"
                 android:text="@{delivery.type}"
                 android:textColor="@color/black"
                 android:textSize="24sp"
@@ -73,7 +73,7 @@
                 android:id="@+id/message"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/type"
+                android:layout_below="@+id/presentAmount"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/imageIcon"
@@ -84,4 +84,3 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </layout>
-
